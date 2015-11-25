@@ -15,17 +15,18 @@ git clone git@github.com:gwu-business/salad-system-alchemy.git
 cd salad-system-alchemy/
 ````
 
-Setup database (requires mysql).
-
-```` sh
-mysql -uroot -p -e "DROP DATABASE IF EXISTS salad_db; CREATE DATABASE salad_db;"
-mysql -uroot -p salad_db < schema.sql
-````
-
 Install package dependencies.
 
 ```` sh
 pip install -r requirements.txt
+````
+
+Setup database (requires mysql).
+
+```` sh
+mysql -uroot -p -e "DROP DATABASE IF EXISTS salad_db; CREATE DATABASE salad_db;"
+python migrate_database.py
+python populate_database.py
 ````
 
 Run local web server, and visit http://localhost:5000/ in a browser.
