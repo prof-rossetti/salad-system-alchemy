@@ -1,17 +1,18 @@
-# Salad System (Flask Implementation)
+# Salad System (SQL-Alchemy Implementation)
 
 An example database-connected web app,
- using the [Flask](http://flask.pocoo.org/) Python library.
+ demonstrating object-relational mapping with the [Flask/ SQL Alchemy](http://flask-sqlalchemy.pocoo.org/2.1/) Python library.
 
 Represents a partial implementation of [Salad System Requirements](https://github.com/gwu-business/salad-system-requirements).
 
-Based on [Salad System (Python Implementation)](https://github.com/gwu-business/salad-system-py).
+Based on [Salad System (Python Implementation)](https://github.com/gwu-business/salad-system-py)
+ and [Salad System (Flask Implementation)](https://github.com/gwu-business/salad-system-flask).
 
 ## Usage
 
 ```` sh
-git clone git@github.com:gwu-business/salad-system-flask.git
-cd salad-system-flask/
+git clone git@github.com:gwu-business/salad-system-alchemy.git
+cd salad-system-alchemy/
 ````
 
 Setup database (requires mysql).
