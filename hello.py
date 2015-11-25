@@ -25,6 +25,8 @@ db = SQLAlchemy(app)
 #
 
 class Menu(db.Model):
+    __tablename__ = "menus"
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True)
 
@@ -34,13 +36,40 @@ class Menu(db.Model):
     def __repr__(self):
         return '<Menu %r>' % self.title
 
+class MenuItem(db.Model):
+    __tablename__ = "menu_items"
+
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(255), unique=True, nullable=False)
+    calories = db.Column(db.Integer, nullable=False)
+    gluten_free = db.Column(db.Boolean)
+    vegan_safe = db.Column(db.Boolean)
+    description = db.Column(db.Text, nullable=False)
+
+    def __init__(self, category, title, calories, gluten_free, vegan_safe, description):
+        self.category = category
+        self.title = title
+        self.calories = calories
+        self.gluten_free = gluten_free
+        self.vegan_safe = vegan_safe
+        self.description = description
+
+    #def __init__(self, options):
+    #    self.category = options["category"]
+    #    self.title = options["title"]
+    #    self.calories = options["calories"]
+    #    self.gluten_free = options["gluten_free"]
+    #    self.vegan_safe = options["vegan_safe"]
+    #    self.description = options["description"]
+
+    def __repr__(self):
+        return '<MenuItem %r>' % self.title
 
 
 
-#db.create_all()
-#fall_menu = Menu('New England Fall 2015')
-#db.session.add(admin)
-#db.session.commit()
+
+
 
 
 

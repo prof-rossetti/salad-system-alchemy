@@ -1,4 +1,4 @@
-from hello import db, Menu
+from hello import db, Menu, MenuItem, code # debug with code.interact(local=dict(globals(), **locals()))
 
 def create_menu():
     try:
@@ -8,21 +8,23 @@ def create_menu():
     except Exception as e:
         print(e)
 
-def create_menu_item():
-    print "todo"
-    #sql = "INSERT INTO `menu_items` (`category`,`title`,`calories`,`gluten_free`,`vegan_safe`,`description`) VALUES (%s, %s, %s, %s, %s, %s)"
-    #print(sql)
-    #cursor.execute(sql, ('SignatureSalad', 'TEST SALAD',  1111, 0, 1,  'a salad to use when testing the web application.'))
+def create_menu_items():
+    try:
+        kale_yeah = MenuItem(   'SeasonalSalad',  'KALE YEAH',  540, 0, 1,   'a kale-based salad.')
+        newton = MenuItem(      'SignatureGrain', 'NEWTON',     720, 1, 0,   'quinoa + farro, organic arugula, tomatoes, raw corn, organic chickpeas, spicy broccoli, organic white cheddar, roasted chicken, pesto vinaigrette.')
+        #test_salad = MenuItem(  'SignatureSalad', 'TEST SALAD', 1111, 0, 1,  'a salad to use when testing the web application.')
+        for menu_item in [kale_yeah, newton]:
+            db.session.add(menu_item)
+            db.session.commit()
+    except Exception as e:
+        print(e)
 
 def count_menu_items():
-    print "todo"
-    #sql = "SELECT * FROM menu_items;"
-    #cursor.execute(sql)
-    #for row in cursor.fetchall():
-    #    print(row)
+    menu_item_count = MenuItem.query.count()
+    print("THERE ARE %s MENU ITEMS IN THE DATABASE" % menu_item_count)
 
 create_menu()
 
-#create_menu_item()
+create_menu_items()
 
-#count_menu_items()
+count_menu_items()
