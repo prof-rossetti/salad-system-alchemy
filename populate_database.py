@@ -14,10 +14,35 @@ def create_menu():
         rollback_and_print(e)
 
 def create_menu_items():
-    kale_yeah = MenuItem(   'SeasonalSalad',  'KALE YEAH',  540, 0, 1,   'a kale-based salad.')
-    newton = MenuItem(      'SignatureGrain', 'NEWTON',     720, 1, 0,   'quinoa + farro, organic arugula, tomatoes, raw corn, organic chickpeas, spicy broccoli, organic white cheddar, roasted chicken, pesto vinaigrette.')
-    #test_salad = MenuItem(  'SignatureSalad', 'TEST SALAD', 1111, 0, 1,  'a salad to use when testing the web application.')
-    for menu_item in [kale_yeah, newton]:
+    menu_items = [
+        {
+            "category": 'SignatureSalad',
+            "title": 'TEST SALAD',
+            "calories": 1111,
+            "gluten_free": 0,
+            "vegan_safe": 1,
+            "description": 'a salad to use when testing the web application.'
+        },
+        {
+            "category": 'SeasonalSalad',
+            "title": 'KALE YEAH',
+            "calories": 540,
+            "gluten_free": 0,
+            "vegan_safe": 1,
+            "description": 'a kale-based salad.'
+        },
+        {
+            "category": 'SignatureGrain',
+            "title": 'NEWTON',
+            "calories": 720,
+            "gluten_free": 1,
+            "vegan_safe": 0,
+            "description": 'a fall salad with apples.'
+        }
+    ]
+
+    for menu_item_attribute_dict in menu_items:
+        menu_item = MenuItem(menu_item_attribute_dict)
         try:
             db.session.add(menu_item)
             db.session.commit()

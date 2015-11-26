@@ -47,21 +47,13 @@ class MenuItem(db.Model):
     vegan_safe = db.Column(db.Boolean)
     description = db.Column(db.Text, nullable=False)
 
-    def __init__(self, category, title, calories, gluten_free, vegan_safe, description):
-        self.category = category
-        self.title = title
-        self.calories = calories
-        self.gluten_free = gluten_free
-        self.vegan_safe = vegan_safe
-        self.description = description
-
-    #def __init__(self, options):
-    #    self.category = options["category"]
-    #    self.title = options["title"]
-    #    self.calories = options["calories"]
-    #    self.gluten_free = options["gluten_free"]
-    #    self.vegan_safe = options["vegan_safe"]
-    #    self.description = options["description"]
+    def __init__(self, options):
+        self.category = options["category"]
+        self.title = options["title"]
+        self.calories = options["calories"]
+        self.gluten_free = options["gluten_free"]
+        self.vegan_safe = options["vegan_safe"]
+        self.description = options["description"]
 
     def __repr__(self):
         return '<MenuItem %r>' % self.title
