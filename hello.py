@@ -66,9 +66,6 @@ def rollback_and_print(error):
     print("ERROR --> %s" % (error.message))
     db.session.rollback() # to avoid sqlalchemy.exc.InvalidRequestError
 
-#def validate_presence_of(form_input):
-#    pass
-
 #
 # DEFINE ROUTES
 #
@@ -92,7 +89,7 @@ def new_menu_item():
     # CAPTURE, VALIDATE, AND TRANSFORM FORM DATA
 
     try:
-        calories = request.form['calories']
+        calories = int(request.form['calories'])
     except ValueError as e:
         flash('Please specify number of calories.') # A VALIDATION!
         return redirect(url_for('edit_menu_item')) #todo: retain previous form input values instead of resetting the form state
@@ -110,7 +107,7 @@ def new_menu_item():
     menu_item = MenuItem({
         "category": request.form['category'],
         "title": request.form['title'],
-        "calories": int(calories),
+        "calories": calories,
         "gluten_free": int(gluten_free),
         "vegan_safe": int(vegan_safe),
         "description": request.form['description']
@@ -122,12 +119,12 @@ def new_menu_item():
         db.session.add(menu_item)
         db.session.commit()
     except Exception as e:
-        code.interact(local=dict(globals(), **locals()))
-        rollback_and_print(e)
+        flash('Please revise form inputs -- %s' % e.message)
+        return redirect(url_for('edit_menu_item'))
 
     # REDIRECT WITH AN ALERT MESSAGE
 
-    flash('Thanks for adding a menu item.')
+    flash('Thanks for adding a menu item -- %s.' % menu_item.title)
     return redirect(url_for('menu_items'))
 
 #
@@ -135,5 +132,5 @@ def new_menu_item():
 #
 
 if __name__ == "__main__":
-    #app.debug = True
+    app.debug = True
     app.run()
