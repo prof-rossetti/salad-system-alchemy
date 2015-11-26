@@ -1,7 +1,7 @@
-# Salad System (SQL-Alchemy Implementation)
+# Salad System (SQLAlchemy Implementation)
 
 An example database-connected web app,
- demonstrating object-relational mapping with the [Flask/ SQL Alchemy](http://flask-sqlalchemy.pocoo.org/2.1/) Python library.
+ demonstrating object-relational mapping with the [Flask/ SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.1/) Python library.
 
 Represents a partial implementation of [Salad System Requirements](https://github.com/gwu-business/salad-system-requirements).
 
@@ -37,4 +37,4 @@ python hello.py
 
 ![a screenshot depicting a menu page with an alert message at the top which reads: 'thanks for adding a menu item'](static/images/menu-screenshot.png)
 
-## [License](LICENCE)
+## [License](LICENSE)
