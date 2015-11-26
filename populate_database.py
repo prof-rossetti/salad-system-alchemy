@@ -1,9 +1,5 @@
 import code # to debug: `code.interact(local=locals())` or `code.interact(local=dict(globals(), **locals()))`
-from hello import db, Menu, MenuItem
-
-def rollback_and_print(error):
-    print("ERROR --> %s" % (error.message))
-    db.session.rollback() # to avoid sqlalchemy.exc.InvalidRequestError
+from hello import db, Menu, MenuItem, rollback_and_print
 
 def create_menu():
     try:

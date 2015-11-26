@@ -58,96 +58,92 @@ class MenuItem(db.Model):
     def __repr__(self):
         return '<MenuItem %r>' % self.title
 
+#
+# DEFINE HELPER METHODS
+#
 
+def rollback_and_print(error):
+    print("ERROR --> %s" % (error.message))
+    db.session.rollback() # to avoid sqlalchemy.exc.InvalidRequestError
 
+#
+# DEFINE ROUTES
+#
 
+@app.route("/")
+def hello():
+    return render_template('index.html')
 
+@app.route("/menu")
+def menu_items():
+    #result = db.session.execute("SELECT * from menu_items ORDER BY id DESC LIMIT 10;")
+    #menu_items = [
+    #    dict(
+    #        id= row["id"],
+    #        category=row["category"],
+    #        title=row["title"],
+    #        calories=row["calories"],
+    #        gluten_free=row["gluten_free"],
+    #        vegan_safe=row["vegan_safe"],
+    #        description=row["description"]
+    #    ) for row in result.fetchall()
+    #
+    menu_items = MenuItem.query.all()
+    return render_template('menu-items/index.html', menu_items=menu_items)
 
+@app.route("/form")
+def edit_menu_item():
+    return render_template('menu-items/form.html')
 
+@app.route("/new", methods=['POST'])
+def new_menu_item():
 
+    # CAPTURE, VALIDATE, AND TRANSFORM FORM DATA
 
+    category = request.form['category']
+    title = request.form['title']
+    description = request.form['description']
 
+    try:
+        calories = request.form['calories']
+        calories = int(calories)
+    except ValueError as e:
+        #calories = None
+        flash('Please specify number of calories.') # A VALIDATION!
+        return redirect(url_for('edit_menu_item')) #todo: retain previous form input values instead of resetting the form state
 
+    try:
+        gluten_free = True if request.form['gluten_free'] else False
+    except KeyError as e:
+        gluten_free = False
+    finally:
+        gluten_free = int(gluten_free)
 
+    try:
+        vegan_safe = True if request.form['vegan_safe'] else False
+    except KeyError as e:
+        vegan_safe = False
+    finally:
+        vegan_safe = int(vegan_safe)
 
-####
-#### DEFINE ROUTES
-####
-###
-###@app.route("/")
-###def hello():
-###    return render_template('index.html')
-###
-###@app.route("/menu")
-###def menu_items():
-###    ###cursor = mysql.connect().cursor()
-###    ###cursor.execute("SELECT * from menu_items ORDER BY id DESC LIMIT 10;")
-###    ###menu_items = [
-###    ###    dict(
-###    ###        id= row[0],
-###    ###        category=row[1],
-###    ###        title=row[2],
-###    ###        calories=row[3],
-###    ###        gluten_free=row[4],
-###    ###        vegan_safe=row[5],
-###    ###        description=row[6]
-###    ###    ) for row in cursor.fetchall()
-###    ###]
-###    ###return render_template('menu-items/index.html', menu_items=menu_items)
-###
-###@app.route("/form")
-###def edit_menu_item():
-###    return render_template('menu-items/form.html')
-###
-###@app.route("/new", methods=['POST'])
-###def new_menu_item():
-###
-###    # CAPTURE, VALIDATE, AND TRANSFORM FORM DATA
-###
-###    category = request.form['category']
-###    title = request.form['title']
-###    description = request.form['description']
-###
-###    try:
-###        calories = request.form['calories']
-###        calories = int(calories)
-###    except ValueError as e:
-###        #calories = None
-###        flash('Please specify number of calories.') # A VALIDATION!
-###        return redirect(url_for('edit_menu_item')) #todo: retain previous form input values instead of resetting the form state
-###
-###    try:
-###        gluten_free = True if request.form['gluten_free'] else False
-###    except KeyError as e:
-###        gluten_free = False
-###    finally:
-###        gluten_free = int(gluten_free)
-###
-###    try:
-###        vegan_safe = True if request.form['vegan_safe'] else False
-###    except KeyError as e:
-###        vegan_safe = False
-###    finally:
-###        vegan_safe = int(vegan_safe)
-###
-###    # CREATE NEW RECORD
-###
-###    ###connection = mysql.connect()
-###    ###cursor = connection.cursor()
-###    ###sql = "INSERT INTO `menu_items` (`category`,`title`,`calories`,`gluten_free`,`vegan_safe`,`description`) VALUES (%s, %s, %s, %s, %s, %s)"
-###    ###cursor.execute(sql, (category, title, calories, gluten_free, vegan_safe, description))
-###    ###connection.commit()
-###
-###    # REDIRECT WITH AN ALERT MESSAGE
-###
-###    flash('Thanks for adding a menu item.')
-###    return redirect(url_for('menu_items'))
-###
-####
-#### START LOCAL WEB SERVER WHEN THIS SCRIPT IS EXECUTED
-####
-###
-###if __name__ == "__main__":
-###    app.debug = True
-###    app.run()
-###
+    # CREATE NEW RECORD
+
+    code.interact(local=dict(globals(), **locals()))
+    ###connection = mysql.connect()
+    ###cursor = connection.cursor()
+    ###sql = "INSERT INTO `menu_items` (`category`,`title`,`calories`,`gluten_free`,`vegan_safe`,`description`) VALUES (%s, %s, %s, %s, %s, %s)"
+    ###cursor.execute(sql, (category, title, calories, gluten_free, vegan_safe, description))
+    ###connection.commit()
+
+    # REDIRECT WITH AN ALERT MESSAGE
+
+    flash('Thanks for adding a menu item.')
+    return redirect(url_for('menu_items'))
+
+#
+# START LOCAL WEB SERVER WHEN THIS SCRIPT IS EXECUTED
+#
+
+if __name__ == "__main__":
+    #app.debug = True
+    app.run()
