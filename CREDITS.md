@@ -11,3 +11,4 @@
   + [Flask SQL-Alchemy Models](http://flask-sqlalchemy.pocoo.org/2.1/models/)
   + http://docs.sqlalchemy.org/en/rel_1_0/core/constraints.html#sqlalchemy.schema.ForeignKey
   + http://stackoverflow.com/a/8871157/670433
+  + http://stackoverflow.com/a/4187279/670433

@@ -66,6 +66,9 @@ def rollback_and_print(error):
     print("ERROR --> %s" % (error.message))
     db.session.rollback() # to avoid sqlalchemy.exc.InvalidRequestError
 
+#def validate_presence_of(form_input):
+#    pass
+
 #
 # DEFINE ROUTES
 #
@@ -76,19 +79,7 @@ def hello():
 
 @app.route("/menu")
 def menu_items():
-    #result = db.session.execute("SELECT * from menu_items ORDER BY id DESC LIMIT 10;")
-    #menu_items = [
-    #    dict(
-    #        id= row["id"],
-    #        category=row["category"],
-    #        title=row["title"],
-    #        calories=row["calories"],
-    #        gluten_free=row["gluten_free"],
-    #        vegan_safe=row["vegan_safe"],
-    #        description=row["description"]
-    #    ) for row in result.fetchall()
-    #
-    menu_items = MenuItem.query.all()
+    menu_items =  MenuItem.query.order_by(MenuItem.id.desc()).limit(10)
     return render_template('menu-items/index.html', menu_items=menu_items)
 
 @app.route("/form")
@@ -100,15 +91,9 @@ def new_menu_item():
 
     # CAPTURE, VALIDATE, AND TRANSFORM FORM DATA
 
-    category = request.form['category']
-    title = request.form['title']
-    description = request.form['description']
-
     try:
         calories = request.form['calories']
-        calories = int(calories)
     except ValueError as e:
-        #calories = None
         flash('Please specify number of calories.') # A VALIDATION!
         return redirect(url_for('edit_menu_item')) #todo: retain previous form input values instead of resetting the form state
 
@@ -116,24 +101,29 @@ def new_menu_item():
         gluten_free = True if request.form['gluten_free'] else False
     except KeyError as e:
         gluten_free = False
-    finally:
-        gluten_free = int(gluten_free)
 
     try:
         vegan_safe = True if request.form['vegan_safe'] else False
     except KeyError as e:
         vegan_safe = False
-    finally:
-        vegan_safe = int(vegan_safe)
+
+    menu_item = MenuItem({
+        "category": request.form['category'],
+        "title": request.form['title'],
+        "calories": int(calories),
+        "gluten_free": int(gluten_free),
+        "vegan_safe": int(vegan_safe),
+        "description": request.form['description']
+    })
 
     # CREATE NEW RECORD
 
-    code.interact(local=dict(globals(), **locals()))
-    ###connection = mysql.connect()
-    ###cursor = connection.cursor()
-    ###sql = "INSERT INTO `menu_items` (`category`,`title`,`calories`,`gluten_free`,`vegan_safe`,`description`) VALUES (%s, %s, %s, %s, %s, %s)"
-    ###cursor.execute(sql, (category, title, calories, gluten_free, vegan_safe, description))
-    ###connection.commit()
+    try:
+        db.session.add(menu_item)
+        db.session.commit()
+    except Exception as e:
+        code.interact(local=dict(globals(), **locals()))
+        rollback_and_print(e)
 
     # REDIRECT WITH AN ALERT MESSAGE
 
