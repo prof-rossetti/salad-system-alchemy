@@ -1,4 +1,9 @@
-from hello import db, Menu, MenuItem, code # debug with code.interact(local=dict(globals(), **locals()))
+import code # to debug: `code.interact(local=locals())` or `code.interact(local=dict(globals(), **locals()))`
+from hello import db, Menu, MenuItem
+
+def rollback_and_print(error):
+    print("ERROR --> %s" % (error.message))
+    db.session.rollback() # to avoid sqlalchemy.exc.InvalidRequestError
 
 def create_menu():
     try:
@@ -6,18 +11,18 @@ def create_menu():
         db.session.add(fall_menu)
         db.session.commit()
     except Exception as e:
-        print(e)
+        rollback_and_print(e)
 
 def create_menu_items():
-    try:
-        kale_yeah = MenuItem(   'SeasonalSalad',  'KALE YEAH',  540, 0, 1,   'a kale-based salad.')
-        newton = MenuItem(      'SignatureGrain', 'NEWTON',     720, 1, 0,   'quinoa + farro, organic arugula, tomatoes, raw corn, organic chickpeas, spicy broccoli, organic white cheddar, roasted chicken, pesto vinaigrette.')
-        #test_salad = MenuItem(  'SignatureSalad', 'TEST SALAD', 1111, 0, 1,  'a salad to use when testing the web application.')
-        for menu_item in [kale_yeah, newton]:
+    kale_yeah = MenuItem(   'SeasonalSalad',  'KALE YEAH',  540, 0, 1,   'a kale-based salad.')
+    newton = MenuItem(      'SignatureGrain', 'NEWTON',     720, 1, 0,   'quinoa + farro, organic arugula, tomatoes, raw corn, organic chickpeas, spicy broccoli, organic white cheddar, roasted chicken, pesto vinaigrette.')
+    #test_salad = MenuItem(  'SignatureSalad', 'TEST SALAD', 1111, 0, 1,  'a salad to use when testing the web application.')
+    for menu_item in [kale_yeah, newton]:
+        try:
             db.session.add(menu_item)
             db.session.commit()
-    except Exception as e:
-        print(e)
+        except Exception as e:
+            rollback_and_print(e)
 
 def count_menu_items():
     menu_item_count = MenuItem.query.count()
